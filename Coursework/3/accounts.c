@@ -76,6 +76,7 @@ dept_t *load_dept(int id)
 	int balance = 0;
 	while(&fp != '\n')
 		balance += read_int_line(fp);
+	fclose(fp);
 	
 	dept_t *new_dept_ptr = create_dept(id, name, balance);
 	free(name);
@@ -83,48 +84,43 @@ dept_t *load_dept(int id)
 	return new_dept_ptr;
 }
 
-
 // For (c)
 void free_dept(dept_t *dept)
 {
+	free(dept->name);
+	free(dept);
 }
-
 
 // For (d)
 void print_dept(dept_t *dept)
 {
+	
 }
-
 
 // For (e)
 void add_dept(dept_t **all_depts, dept_t *new_dept)
 {
 }
 
-
 // For (f)
 void load_all_depts(dept_t **all_depts, char *filename)
 {
 }
-
 
 // For (g)
 void free_all_depts(dept_t *all_depts)
 {
 }   
 
-
 // For (h)
 dept_t *find_dept(dept_t *all_depts, char *dept_name)
 {
 }
 
-
 // For (i)
 void summary_for_dept(dept_t *all_depts, char *dept_name)
 {
 }
-
 
 // For (j)
 void generate_report(dept_t *all_depts)
@@ -134,13 +130,63 @@ void generate_report(dept_t *all_depts)
 char *generate_filename(int id)
 {
 	char *filename = malloc(sizeof(char) * 30);
-	sprintf(filename, "%d.txt", id);
+	sprintf(id, "%d.txt", filename);
 	realloc(filename, sizeof(char) * (strlen(filename) + 1));
 	return filename;
 }
 
 char *read_char_line(FILE *fp);
 {
+	char ch;
+	int cur_size = 12;
+	char *str = malloc(sizeof(char) * cur_size);
+	int cur_pos = 0;
 	
+	fscanf(fp, "%c", &ch);
+	while(ch != '\n')
+	{
+		if(cur_pos = cur_size - 1)
+		{
+			cur_size *= 2;
+			realloc(str, sizeof(char) * cur_size);
+		}
+		str[cur_pos] = ch;
+		cur_pos++;
+		fscanf(fp, "%c", &ch);
+	}
+	str[cur_pos] = '\0';
+	
+	return str;
 }
+
 int read_int_line(FILE *fp);
+{
+	char ch;
+	int cur_size = 12;
+	char *str = malloc(sizeof(char) * cur_size);
+	int cur_pos = 0;
+	int sign = 1;
+	
+	fscanf(fp, "%c", &ch);
+	if(ch == '(')
+		sign = -1;
+	while(ch != '\n')
+	{
+		if(cur_pos = cur_size - 1)
+		{
+			cur_size *= 2;
+			realloc(str, sizeof(char) * cur_size);
+		}
+		if(ch != '(' && ch != ')')
+		{
+			str[cur_pos] = ch;
+			cur_pos++;
+		}
+		fscanf(fp, "%c", &ch);
+	}
+	str[cur_pos] = '\0';
+	
+	num = sign * atoi(str);
+	free(str);
+	return num;
+}
